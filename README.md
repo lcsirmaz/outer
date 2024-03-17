@@ -39,12 +39,11 @@ is no other achievable objective vector **y**' which would be coordinatewise &le
 (or &ge; when maximizing).
 
 The task of MOLP solver is to find the collection of all extremal objective vectors.
-These extremal vectors form the boundary of an m-dimensional polyhedral cone.
-
-This MOLP solver finds the vertices of this boundary by iteratively 
-computing outer approximations of that cone. In each iteration the 
-approximating polytope is cut by a new facet (bounding hyperplane) of t
-he final cone. The time required for an iteration varies widely from a 
+These extremal vectors form the boundary of an m-dimensional convex polyhedral cone,
+thus it suffices to find its *vertices*. This MOLP solver finds these vertices by iteratively 
+computing outer approximations of the solution cone. In each iteration the 
+approximating polytope is cut by a new facet (bounding hyperplane) of the
+final cone. The time required for an iteration varies widely from a 
 couple of microseconds to several days. After each iteration the solver
 checks if the process has been interrupted by a SIGUSR1 signal.
 If it has, it switches to a quick and dirty method which
@@ -62,7 +61,7 @@ maximizing MOLP all objectives must be bounded from above.
 
 The algorithm is an implementation of Benson's outer approximation mathod,
 see Benson, H.P.: *An Outer Approximation Algorithm for Generating All Efficient Extreme Points in the Outcome Set of a Multiple Objective Linear Programming Problem*. 
-Journal of Global Optimization 13, 1–24 (1998). [https://doi.org/10.1023/A:1008215702611](doi.org/10.1023/A:1008215702611).
+Journal of Global Optimization 13, 1–24 (1998). [https://doi.org/10.1023/A:1008215702611](https://doi.org/10.1023/A:1008215702611).
 
 #### USAGE
 
@@ -81,7 +80,7 @@ of the problem in vlp format. Accepted options are
 |:-------|:--------|
 | `-h`          | display a short help and quit |
 | `--help`      | display all options |
-| `--help=<topic>`  | help on one of the following topics: input, output, exit, signal, checkpoint, resume, boot, vlp |
+| `--help=<topic>`  | help on one of the following topics: input, output, config, <br> exit, signal, checkpoint, resume, boot, vlp |
 | `--help=output`  | describe the output format |
 | `--version`   | version and copyright information |
 | `--dump`      | dump the default config file and quit |
@@ -113,7 +112,7 @@ Change tolerances with great care.
 |**Algorithm parameters**| |
 |:--------|:------------|
 |`RandomVertex=1`<br>&nbsp; | 0 = no, 1 = yes <br>  pick the next vertex to be passed to the oracle randomly. |
-|`RandomIdealPoint=1` <br>&nbsp; | 0 = no, 1 = yes <br> choose the ideal direction randomly rathar than using (1,1,1,...,1). |
+|`RandomIdealPoint=1` <br>&nbsp; | 0 = no, 1 = yes <br> choose the ideal direction randomly rather than using (1,1,1,...,1). |
 |`ExactVertexEq=0`<br>&nbsp;<br>&nbsp; | 0 = no, 1 = yes <br>  when a vertex is created, recompute the coordinates immediately from the set of its adjacent facets. |
 |`RecalculateVertices=100`<br>&nbsp;<br>&nbsp; | non-negative integer <br> after that many iterations recalculate all vertices from the set of its adjacent facets. The number should be zero (meaning never), or at least 5. |
 |`CheckConsistency=0`<br>&nbsp;<br>&nbsp; | non-negative integer <br> after this many iterations check the consistency of the data structure against numerical errors. The number should be zero (meaning never), or at least 5. |
@@ -151,7 +150,7 @@ Change tolerances with great care.
 |`PolytopeEps=1.3e-8` <br>&nbsp; | positive real number <br> a facet and a vertex are considered adjacent if their distance is smaller than this value. |
 |`ScaleEps=3e-9` <br>&nbsp;<br>&nbsp; | positive real number <br> coefficients in the scaled facet equation are rounded to the nearest integer if they are closer to it than this value. |
 |`LineqEps=8e-8` <br>&nbsp;<br>&nbsp; | positive real number <br> when solving a system of linear equations for vertex coordinates, a coefficient smaller than this is considered to be zero. |
-|`RoundEps=1e-9` <br>&nbsp;<br>&nbsp; | positive real number <br> if facets reported by the oracle are rounded coordinates (`RoundFacets=1`), this is the tolerance in the rounding algorithm. |
+|`RoundEps=1e-9` <br>&nbsp;<br>&nbsp; | positive real number <br> if facets coordinates reported by the oracle are to be rounded (`RoundFacets=1`), this is the tolerance in the rounding algorithm. |
 |`VertexRecalcEps=1e-6` <br>&nbsp;<br>&nbsp; | positive real number <br> when recalculating vertices, report numerical instability if the new and old coordinates differ at least this much. |
 
 #### EXIT STATUS
