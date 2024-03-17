@@ -198,7 +198,7 @@ static void report_new_vertex(int vno)
 
 static void report_memory(void)
 {static int last_memreport=0; char buff[50];
-    if(! PARAMS(MemoryReport) ||
+    if( PARAMS(MemoryReport)<2 ||
        last_memreport==dd_stats.memory_allocated_no ||
        dd_stats.out_of_memory ) return;
     last_memreport=dd_stats.memory_allocated_no;
@@ -274,14 +274,14 @@ static void dump_and_save(int status)
       report(R_txt, " total time              %s\n",
          showtime(endtime)); 
       report(R_txt, DASHSEP "\nStatistics\n"
-      "LP:\n"
+      "LP\n"
       " oracle calls            %d\n"
       "   avg iterations/call   %s\n"
       " total oracle time       %s\n",
       oraclecalls, readable((0.0001+oraclerounds)/(0.0001+oraclecalls),0),
       showtime(oracletime));
       report(R_txt,
-      "Combinatorics:\n"
+      "Combinatorics\n"
       " vertices probed         %d\n"
       " vertices # max          %d\n"
       " facets added            %d\n"
@@ -316,9 +316,9 @@ static void dump_and_save(int status)
          show_parameters("Parameters with non-default values:\n");
     } else {
         if(PARAMS(MemoryReport)>0 || dd_stats.out_of_memory)
-            report_memory_usage(R_txt,1,"\n" DASHSEP "\nMemory allocation");
+            report_memory_usage(R_txt,1,"\n" DASHSEP "\nMemory allocation:");
         if(PARAMS(PrintParams))
-            show_parameters(DASHSEP "\nParameters with non-default values\n");
+            show_parameters(DASHSEP "\nParameters with non-default values:\n");
     }
     partial = status<2 ? 0 : 1; // save data when consistent
     if(PARAMS(SaveFacets)>partial || (partial==0 && PARAMS(SaveFacetFile))){

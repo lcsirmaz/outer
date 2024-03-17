@@ -139,7 +139,7 @@ Change tolerances with great care.
 |`Progressreport=5` <br>&nbsp;<br>&nbsp; | non-negative integer <br> minimum time between two progress reports in seconds. Should be zero for no progress reports, or at least 5. The command line option `-p T` overrides this value. |
 |`VertexReport=1` <br>&nbsp;<br>&nbsp; | 0 = no, 1 = yes <br> report each extremal vertex immediately when it is found. The command line option `-y-` (no) or `-y+` (yes) overrides the value defined here. |
 |`FacetReport=0` <br>&nbsp; | 0 = no, 1 = yes <br> report each facet immediately when generated. |
-|`MemoryReport=0` <br>&nbsp;<br>&nbsp; | 0 = no, 1 = yes <br> report the size and location, whenever they change, of the memory blocks storing the combinatorial data structure. |
+|`MemoryReport=0` <br>&nbsp;<br>&nbsp; | 0 = no, 1 = at the end, 2 = always <br> report the size and location, whenever they change, of the memory blocks storing the combinatorial data structure. |
 |`VertexAsFraction=1` <br>&nbsp;<br>&nbsp; | 0 = no, 1 = yes <br> if possible, print (and save) vertex coordinates as fractions with small denominators rather than floating point numerals. |
 |`PrintStatistics=1` <br>&nbsp; | 0 = no, 1 = yes <br> print resources used (number of iterations, edge tests, etc.) when the program stops. |
 |`PrintParams=1` <br>&nbsp; | 0 = no, 1 = yes <br> print algorithm parameters which are not equal to their default values. |

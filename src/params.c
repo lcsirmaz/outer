@@ -216,7 +216,7 @@ CFG( VertexReport, BOOL)
 CFG( FacetReport, BOOL)
 "#    print out facets immediately when generated.\n"
 "#\n"
-CFG( MemoryReport, BOOL)
+CFG( MemoryReport, "0 = never, 1 = at the end, 2 = always")
 "#    report the size and location, whenever it changes, of memory\n"
 "#    blocks storing the data structure.\n"
 "#\n"
@@ -566,7 +566,7 @@ static struct char_params {
   CFG(VertexAsFraction,1),
   CFG(VertexReport,1),
   CFG(FacetReport,1),
-  CFG(MemoryReport,1),
+  CFG(MemoryReport,2),
   CFG(PrintVertices,2),
   CFG(PrintFacets,2),
   CFG(SaveVertices,2),
