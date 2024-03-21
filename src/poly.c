@@ -393,7 +393,8 @@ static void AUX_init_main_slot(memslot_t slot, size_t nno, size_t n, size_t bsiz
         return;
     }
     dd_stats.total_memory += total;
-    dd_stats.max_memory=dd_stats.total_memory;
+    if(dd_stats.total_memory>dd_stats.max_memory)
+            dd_stats.max_memory=dd_stats.total_memory;
     memset(ms->ptr,0,total);
     return;
 }
@@ -844,28 +845,20 @@ static int
 
 /* BOOL is_livingVertex(vno)
 *     check if bit 'vno' is set in bitmap VertexLiving
-* void clear_in_VertexLiving(vno)
-*     clear bit 'vno' in bitmap VertexLiving
 * void set_in_VertexLiving(vno)
 *     set bit 'vno' in bitmap VertexLiving
 * BOOL is_finalVertex(vno)
 *     check if bit 'vno' is set in bitmap VertexFinal
-* void clear_in_VertexFinal(vno)
-*     clear bit 'vno' if bitmap VertexFinal
 * void set_in_VertexFinal(vno)
 *     set bit 'vno' in bitmap VertexFinal */
 
 #define is_livingVertex(vno)	    extract_bit(VertexLiving,vno)
-#define clear_in_VertexLiving(vno)  clear_bit(VertexLiving,vno)
 #define set_in_VertexLiving(vno)    set_bit(VertexLiving,vno)
 #define is_finalVertex(vno)	    extract_bit(VertexFinal,vno)
-#define clear_in_VertexFinal(vno)   clear_bit(VertexFinal,vno)
 #define set_in_VertexFinal(vno)     set_bit(VertexFinal,vno)
 
 /* void mark_vertex_as_final(vno)
 *     exported version of set_in_VertexLiving(vno)
-*  void clear_vertex_as_living(vno)
-*     exported version of clear_in_VertexLiving(vno)
 *  void intersect_FacetAdj_VertexLiving(fno)
 *     clear bits in the adjacency list of 'fno' which are not living
 *  void move_vertex_to(coords,adj)bitmap,vno)
@@ -882,8 +875,6 @@ static int
 
 void mark_vertex_as_final(int vno)
 {   set_bit(VertexFinal,vno); }
-//void clear_vertex_as_living(int vno)
-//{   clear_bit(VertexLiving,vno); }
 
 inline static void intersect_FacetAdj_VertexLiving(int fno)
 {int i;
@@ -1430,7 +1421,7 @@ static void compress_from(int vno)
         NextVertex--;
         move_vertex_to(VertexCoords(NextVertex),VertexAdj(NextVertex),vno);
         make_vertex_living(vno);
-        clear_in_VertexLiving(NextVertex);
+        clear_bit(VertexLiving,NextVertex);
         if(is_finalVertex(NextVertex)) set_in_VertexFinal(vno);
         vno++; goto fill_holes;
     }
@@ -1524,7 +1515,7 @@ void add_new_facet(double *coords)
                     "facet %d (d=%lg)\n",vno,ThisFacet,d);
                 dd_stats.instability_warning++;
 // it seems the best thing is to revoke the 'final' flag
-                clear_in_VertexFinal(vno);
+                clear_bit(VertexFinal,vno);
             }
             --NegIdx; *NegIdx = vno;
             dd_stats.vertex_neg++;
@@ -1590,10 +1581,7 @@ void add_new_facet(double *coords)
     // delete negative vertices from VertexLiving
     NegIdx=VertexPosnegList+(MaxVertices-1);
     for(j=0;j<dd_stats.vertex_neg;j++,NegIdx--){ 
-/* debug ONLY ****************** */
-if(!is_livingVertex(*NegIdx)){printf("SHOULD BE LIVING %d\n",*NegIdx);}
-if(is_finalVertex(*NegIdx)){printf("SHOULD NOT BE FINAL!!! %d\n",*NegIdx);}
-        clear_bit(VertexLiving,*NegIdx);
+         clear_bit(VertexLiving,*NegIdx);
     }
     // move new vertices to NextFacet until there is a space
     AllNewVertex=dd_stats.vertex_new;
