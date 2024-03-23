@@ -653,7 +653,7 @@ static int treat_keyword(const char *line)
  }{struct int_params *p; int val; char c;// integer params
     for(p=&INT_PARAMS[0];p->format;p++){
         if(sscanf(line,p->format,&val,&c)==1){
-            if(val<p->min || val > p->max) return -1;
+            if(val!=0 && (val<p->min || val > p->max)) return -1;
             if(!p->filled){ p->filled=1; *(p->ptr)=val; }
             return 1;
         }
