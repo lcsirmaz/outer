@@ -78,13 +78,14 @@ starts with a lower-case letter designating the type of the line as follows.
 | `o`    | objective coefficient |
 | `e`    | end of data, last processed line in the vlp file |
 
-Comment lines are ignored. The `p` program line has the format
+Comment lines are ignored as well as all lines after the close `e` line. Apart from the program
+line, other lines can be provided in any order. The `p` program line has the format
 
     p vlp  <DIR> <ROWS> <COLS> <ALINES> <OBJS> <OLINES>
 
 where `<DIR>` is either `min` or `max` defining whether the problem is to minimize or maximize the
-objectives. Other fields are positive integers. `<ROWS>`, `<COLS&>` are the number of rows and
-columns of the constraint matrix; `<OBJS>` is the number of objectives. &lt;ALINES&gt; and &lt;OLINES&gt; are
+objectives. Other fields are positive integers. `<ROWS>`, `<COLS>` are the number of rows and
+columns of the constraint matrix; `<OBJS>` is the number of objectives. `<ALINES>` and `<OLINES>` are
 the number of `a` and `o` lines in the vlp file; these numbers are ignored by this program.
 **Please note:** rows, columns, and objectives are indexed starting from 1.
 
@@ -99,7 +100,7 @@ A row descriptor line starting with letter `i` can be one of the following:
 | `i <ROW> s <VAL>` | row's value is set (fixed) to equal VAL |
 
 here `<ROW>` is the row's index between 1 and the number of rows, inclusive, and `<VAL>` is a
-floating point constant. The fields are separated by white spaces. The form of a `j` line is similar, 
+floating point constant. Fields are separated by white spaces. The form of a `j` line is similar, 
 it describes the variable types: free, with lower and / or upper bound, or fixed. The default row type
 is free (`f`), the default column type is fixed (`s`) with value zero.
 
@@ -107,8 +108,8 @@ Elements of the constraint matrix are specified as
 
     a <ROW> <COL> <VAL>
 
-where both &lt;ROW&gt; and &lt;COL&gt; are positive integers and &lt;VAL&gt; is a floating point constant.
-Coefficients of the &lt;OBJ&gt;-th objective are given as
+where both `<ROW>` and `<COL>` are positive integers and `<VAL>` is a floating point constant.
+Coefficients of the `<OBJ>`-th objective are given as
 
     o <OBJ> <COL> <VAL>
 
