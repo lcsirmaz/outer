@@ -74,7 +74,7 @@ starts with a lower-case letter designating the type of the line as follows.
 | p    | program line, it should be the first non-comment line |
 | i    | constraint matrix row descriptor |
 | j    | constraint matrix column descriptor |
-| a    | constraing matrix coefficient |
+| a    | constraint matrix coefficient |
 | o    | objective coefficient |
 | e    | end of data, last processed line in the vlp file |
 
@@ -90,7 +90,7 @@ the number of `a` and `o` lines in the vlp file; these numbers are ignored by th
 
 A row descriptor line starting with letter `i` can be one of the following:
 
-|      |          |
+| line | meaning  |
 |:-----|:---------|
 | i &lt;ROW&gt; f | row is free, there is no constraint |
 | i &lt;ROW&gt; l &lt;VAL&gt; | row with lower bound, the row's value is &ge; VAL |
