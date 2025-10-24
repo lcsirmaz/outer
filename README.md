@@ -65,8 +65,8 @@ Csirmaz, L.: *Inner approximation algorithm for solving linear multiobjective op
 
 #### INPUT FORMAT
 
-The VLP input format stores the MOLD problem in a plain text file. Each line
-starts with a lower-case letter designating its type:
+The VLP input format stores the MOLP problem in a plain text file. Each line
+starts with a lower-case letter designating the type of the line as follows.
 
 | type | meaning |
 |:-----|:--------|
@@ -78,41 +78,41 @@ starts with a lower-case letter designating its type:
 | o    | objective coefficient |
 | e    | end of data, last processed line in the vlp file |
 
-Comment lines are ignored. The p program line has the format
+Comment lines are ignored. The `p` program line has the format
 
     p vlp  <DIR> <ROWS> <COLS> <ALINES> <OBJS> <OLINES>
 
 where &lt;DIR&gt; is either `min` or `max` defining whether the problem is to minimize or maximize the
 objectives. Other fields are positive integers. &lt;ROWS&gt;, &lt;COLS&gt; are the number of rows and
-column of the constrainit matrix; &lt;OBJS&gt; is the number of objectives. &lt;ALINES&gt; and &lt;OLINES&gt; are
-the number of  a  and  o  lines in the vlp file; these numbers are ignore by this program.
+columns of the constraint matrix; &lt;OBJS&gt; is the number of objectives. &lt;ALINES&gt; and &lt;OLINES&gt; are
+the number of `a` and `o` lines in the vlp file; these numbers are ignored by this program.
 **Please note:** rows, columns, and objectives are indexed starting from 1.
 
-A row descriptor line starting with letter  i  can be one of the following.
+A row descriptor line starting with letter `i` can be one of the following:
 
 |      |          |
 |:-----|:---------|
 | i &lt;ROW&gt; f | row is free, there is no constraint |
 | i &lt;ROW&gt; l &lt;VAL&gt; | row with lower bound, the row's value is &ge; VAL |
 | i &lt;ROW&gt; u &lt;VAL&gt; | row with upper bound, the row's value is &le; VAL |
-| i &lt;ROW&gt; d &lt;VAL1&gt; &lt;VAL2&gt; | doubly dounded row: VAL1 &le; row's value &le; VAL2 |
+| i &lt;ROW&gt; d &lt;VAL1&gt; &lt;VAL2&gt; | doubly bounded row: VAL1 &le; row's value &le; VAL2 |
 | i &lt;ROW&gt; s &lt;VAL&gt; | row's value is set (fixed) to equal VAL |
 
 here &lt;ROW&gt; is the row's index between 1 and the number of rows, inclusive, and &lt;VAL&gt; is a
-floating point constant. The form of a j line is similar, it describes the variable types:
-free, with lower and / or upper bound, or fixed. The default row type is free, the
-default column type is `fixed` with value zero.
+floating point constant. The fields are separated by white spaces. The form of a `j` line is similar, 
+it describes the variable types: free, with lower and / or upper bound, or fixed. The default row type
+is free (`f`), the default column type is fixed (`s`) with value zero.
 
 Elements of the constraint matrix are specified as
 
     a <ROW> <COL> <VAL>
 
-where both &lt;ROW&gtl; and &lt;COL&gt; are positive integers and &lt;VAL&gt; is a floating point constant.
+where both &lt;ROW&gt; and &lt;COL&gt; are positive integers and &lt;VAL&gt; is a floating point constant.
 Coefficients of the &lt;OBJ&gt;-th objective are given as
 
     o <OBJ> <COL> <VAL>
 
-a and o lines with zero values can be omitted.
+Finally, `a` and `o` lines with zero values can be omitted.
 
 
 #### USAGE
