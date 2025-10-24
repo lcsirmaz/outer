@@ -69,22 +69,22 @@ The VLP input format stores the MOLP problem in a plain text file. Each line
 starts with a lower-case letter designating the type of the line as follows.
 
 | type | meaning |
-|:-----|:--------|
-| c    | comment line, ignored |
-| p    | program line, it should be the first non-comment line |
-| i    | constraint matrix row descriptor |
-| j    | constraint matrix column descriptor |
-| a    | constraint matrix coefficient |
-| o    | objective coefficient |
-| e    | end of data, last processed line in the vlp file |
+|:-------|:--------|
+| `c`    | comment line, ignored |
+| `p`    | program line, it should be the first non-comment line |
+| `i`    | constraint matrix row descriptor |
+| `j`    | constraint matrix column descriptor |
+| `a`    | constraint matrix coefficient |
+| `o`    | objective coefficient |
+| `e`    | end of data, last processed line in the vlp file |
 
 Comment lines are ignored. The `p` program line has the format
 
     p vlp  <DIR> <ROWS> <COLS> <ALINES> <OBJS> <OLINES>
 
-where &lt;DIR&gt; is either `min` or `max` defining whether the problem is to minimize or maximize the
-objectives. Other fields are positive integers. &lt;ROWS&gt;, &lt;COLS&gt; are the number of rows and
-columns of the constraint matrix; &lt;OBJS&gt; is the number of objectives. &lt;ALINES&gt; and &lt;OLINES&gt; are
+where `<DIR>` is either `min` or `max` defining whether the problem is to minimize or maximize the
+objectives. Other fields are positive integers. `<ROWS>`, `<COLS&>` are the number of rows and
+columns of the constraint matrix; `<OBJS>` is the number of objectives. &lt;ALINES&gt; and &lt;OLINES&gt; are
 the number of `a` and `o` lines in the vlp file; these numbers are ignored by this program.
 **Please note:** rows, columns, and objectives are indexed starting from 1.
 
@@ -92,13 +92,13 @@ A row descriptor line starting with letter `i` can be one of the following:
 
 | line | meaning  |
 |:-----|:---------|
-| i &lt;ROW&gt; f | row is free, there is no constraint |
-| i &lt;ROW&gt; l &lt;VAL&gt; | row with lower bound, the row's value is &ge; VAL |
-| i &lt;ROW&gt; u &lt;VAL&gt; | row with upper bound, the row's value is &le; VAL |
-| i &lt;ROW&gt; d &lt;VAL1&gt; &lt;VAL2&gt; | doubly bounded row: VAL1 &le; row's value &le; VAL2 |
-| i &lt;ROW&gt; s &lt;VAL&gt; | row's value is set (fixed) to equal VAL |
+| `i <ROW> f` | row is free, there is no constraint |
+| `i <ROW> l <VAL>` | row with lower bound, the row's value is &ge; VAL |
+| `i <ROW> u <VAL>` | row with upper bound, the row's value is &le; VAL |
+| `i <ROW> d <VAL1> <VAL2>` | doubly bounded row: VAL1 &le; row's value &le; VAL2 |
+| `i <ROW> s <VAL>` | row's value is set (fixed) to equal VAL |
 
-here &lt;ROW&gt; is the row's index between 1 and the number of rows, inclusive, and &lt;VAL&gt; is a
+here `<ROW>` is the row's index between 1 and the number of rows, inclusive, and `<VAL>` is a
 floating point constant. The fields are separated by white spaces. The form of a `j` line is similar, 
 it describes the variable types: free, with lower and / or upper bound, or fixed. The default row type
 is free (`f`), the default column type is fixed (`s`) with value zero.
@@ -141,7 +141,7 @@ of the problem in vlp format. Accepted options are
 | `-ov <file>` | save vertices to \<file\> |
 | `-of <file>` | save facets to \<file\> |
 | `-oc <stub>` | file stub for checkpoint files |
-| `--name=NAME` or <br> `-n NAME`    | specify the problem name |
+| `--name=<name>` or <br> `-n <name>`    | specify the problem name |
 | `--boot=<vertex-list>` | start the algorithm with these facets |
 | `--resume=<chk-file>` | resume computation from a checkpoint file |
 | `-m[0..3]`   | set message level: 0: none, 1: errors, 2: all, 3: verbose |
