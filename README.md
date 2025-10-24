@@ -6,18 +6,18 @@ Columns correspond to variables x<sub>1</sub>, x<sub>2</sub>, . . . ,
 x<sub>c</sub>, which are subject to the restrictions
 
 <table><tbody><tr>
-<td>L<sub>i</sub> &le; x<sub>i</sub> &le; U<sub>i</sub></td>
-<td>where 1 &le; i &le; c</td>
+<td>L<sub>j</sub> &le; x<sub>j</sub> &le; U<sub>j</sub></td>
+<td>where 1 &le; j &le; c</td>
 </tr></tbody></table>
 
 The lower bound L<sub>i</sub> can be -&#x221e; and the upper bound can be +&#x221e;.
 
-For each row 1 &le; j &le; r the j-th constraint is
+For each row 1 &le; i &le; r the i-th constraint is
 
 <table><tbody><tr>
-<td>b<sub>j</sub> = a<sub>1,j</sub> x<sub>1</sub> + a<sub>2,j</sub> x<sub>2</sub> + . . . + a<sub>c,j</sub> x<sub>c</sub></td>
-<td>l<sub>j</sub> &le; b<sub>j</sub> &le; u<sub>j</sub></td>
-<td>where 1 &le; j &le; r</td>
+<td>b<sub>i</sub> = a<sub>1,i</sub> x<sub>1</sub> + a<sub>2,i</sub> x<sub>2</sub> + . . . + a<sub>c,i</sub> x<sub>c</sub></td>
+<td>l<sub>i</sub> &le; b<sub>i</sub> &le; u<sub>i</sub></td>
+<td>where 1 &le; i &le; r</td>
 </tr></tbody></table>
 
 A *feasible solution* is a tuple **x** = &lt;x<sub>1</sub>, x<sub>2</sub>, . . . , x<sub>c</sub>&gt; 
@@ -78,16 +78,16 @@ starts with a lower-case letter designating the type of the line as follows.
 | `o`    | objective coefficient |
 | `e`    | end of data, last processed line in the vlp file |
 
-Comment lines are ignored as well as all lines after the close `e` line. Apart from the program
-line, other lines can be provided in any order. The `p` program line has the format
+Comment lines are ignored as well as all lines after the closing `e` line. Apart from the program
+line, other lines can be provided in any order. The program line has the format
 
     p vlp  <DIR> <ROWS> <COLS> <ALINES> <OBJS> <OLINES>
 
 where `<DIR>` is either `min` or `max` defining whether the problem is to minimize or maximize the
 objectives. Other fields are positive integers. `<ROWS>`, `<COLS>` are the number of rows and
 columns of the constraint matrix; `<OBJS>` is the number of objectives. `<ALINES>` and `<OLINES>` are
-the number of `a` and `o` lines in the vlp file; these numbers are ignored by this program.
-**Please note:** rows, columns, and objectives are indexed starting from 1.
+the number of `a` and `o` lines in the vlp file; these numbers are ignored by this
+program. **Please note:** rows, columns, and objectives are indexed starting from 1.
 
 A row descriptor line starting with letter `i` can be one of the following:
 
@@ -227,8 +227,8 @@ When the program receives a `SIGUSR1` signal, it stops the main cycle of
 iterations, and switches to a &quot;quick and dirty&quot; method to generate
 additional extremal solutions. (Actually, the oracle is asked about all
 vertices of the actual approximation to check whether it is extremal.)
-The method might miss extremal solutions, so the result is not known 
-(can not) be complete. A second `SIGUSR1` signal aborts this post-processing.
+The method might miss extremal solutions, so the result is probabily not
+complete. A second `SIGUSR1` signal aborts this post-processing.
 
 When receiving a `SIGUSR2` signal, the program creates a snapshot file containing the 
 vertices and facets of the actual approximation. Similarly to checkpoint
