@@ -78,18 +78,19 @@ starts with a lower-case letter designating its type:
 | o    | objective coefficient |
 | e    | end of data, last processed line in the vlp file |
 
-Comment lines are ignored. The `p` program line has the format
+Comment lines are ignored. The p program line has the format
 
     p vlp  <DIR> <ROWS> <COLS> <ALINES> <OBJS> <OLINES>
 
-where `DIR` is either 'min' or 'max' defining whether the problem is to minimize or maximize the
-objectives. Other fields are positive integers. `ROWS`, `COLS` are the number of rows and
-column of the constrainit matrix; `OBJS` is the number of objectives. `ALINES` and `OLINES` are
-the number of 'a' and 'o' lines in the vlp file; these numbers are ignore by this program.
+where &lt;DIR&gt; is either `min` or `max` defining whether the problem is to minimize or maximize the
+objectives. Other fields are positive integers. &lt;ROWS&gt;, &lt;COLS&gt; are the number of rows and
+column of the constrainit matrix; &lt;OBJS&gt; is the number of objectives. &lt;ALINES&gt; and &lt;OLINES&gt; are
+the number of  a  and  o  lines in the vlp file; these numbers are ignore by this program.
 **Please note:** rows, columns, and objectives are indexed starting from 1.
 
-A row descriptor line starting with letter 'i' can be one of the following.
+A row descriptor line starting with letter  i  can be one of the following.
 
+|      |          |
 |:-----|:---------|
 | i &lt;ROW&gt; f | row is free, there is no constraint |
 | i &lt;ROW&gt; l &lt;VAL&gt; | row with lower bound, the row's value is &ge; VAL |
@@ -97,21 +98,21 @@ A row descriptor line starting with letter 'i' can be one of the following.
 | i &lt;ROW&gt; d &lt;VAL1&gt; &lt;VAL2&gt; | doubly dounded row: VAL1 &le; row's value &le; VAL2 |
 | i &lt;ROW&gt; s &lt;VAL&gt; | row's value is set (fixed) to equal VAL |
 
-here `ROW` is the row's index between 1 and the number of rows, inclusive, and `VAL` is a
-floating point constant. The form of a 'j' line is similar, it describes the variable types:
-free, with lower and / or upper bound, or fixed. The default row type is `free`, the
+here &lt;ROW&gt; is the row's index between 1 and the number of rows, inclusive, and &lt;VAL&gt; is a
+floating point constant. The form of a j line is similar, it describes the variable types:
+free, with lower and / or upper bound, or fixed. The default row type is free, the
 default column type is `fixed` with value zero.
 
 Elements of the constraint matrix are specified as
 
     a <ROW> <COL> <VAL>
 
-where both `ROW` and `COL` are positive integers and `VAL is a floating point constant.
-Coefficients of the `OBJ`-th objective are given as
+where both &lt;ROW&gtl; and &lt;COL&gt; are positive integers and &lt;VAL&gt; is a floating point constant.
+Coefficients of the &lt;OBJ&gt;-th objective are given as
 
     o <OBJ> <COL> <VAL>
 
-`a` and `o` lines with zero values can be omitted.
+a and o lines with zero values can be omitted.
 
 
 #### USAGE
