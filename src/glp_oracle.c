@@ -122,7 +122,7 @@ static int allocate_vlp(int rows, int cols, int objs)
        xalloc(vlp_lambda,double,objs+1) ||
        xalloc(vlp_M,double,(rows+objs)*(cols+1)) ||
        xalloc(vlp_rowidx,int,rows+objs+1) ||
-       xalloc(vlp_colidx,int,cols+1))
+       xalloc(vlp_colidx,int,cols+2))
          return -1; // out of memory
     // indirect inidices to rows and columns
     for(i=0;i<=rows+objs;i++) vlp_rowidx[i]=i;

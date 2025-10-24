@@ -13,7 +13,7 @@
 
 /* Version and copyright */
 #define VERSION_MAJOR	1
-#define VERSION_MINOR	0
+#define VERSION_MINOR	2
 #ifdef USETHREADS
 #define VERSION_STRING	"threaded version " mkstringof(VERSION_MAJOR.VERSION_MINOR) "T"
 #else
@@ -21,7 +21,7 @@
 #endif
 
 #define COPYRIGHT	\
-"Copyright (C) 2024 Laszlo Csirmaz, https://github.com/lcsirmaz/outer"
+"Copyright (C) 2024-25 Laszlo Csirmaz, https://github.com/lcsirmaz/outer"
 
 /* EOF */
 
