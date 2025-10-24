@@ -90,9 +90,8 @@ static inline void perm_array(int len, int arr[/* 1:len */])
 * double M(row,col)             temporary storage for the constraint
 *                               matrix; indices go from 1
 * int vlp_rowidx[1:rows+objs]   shuffling rows, temporary
-* int vlp_colidx[1:cols+objs+1] shuffling columns, temporary
+* int vlp_colidx[1:cols+1]      shuffling columns, temporary
 * int vlp_objidx[1:objs]        objective indices in rows
-* int vlp_slackobj[1:objs]      slack variables in columns
 * int lambdaidx                 lambda column index
 * double vlp_lambda[1:objs]     obj coeffs in the lambda column
 *
@@ -105,11 +104,10 @@ static double *vlp_M;		/* temporary storage for M */
 static int *vlp_rowidx;		/* temporary row permutation */
 static int *vlp_colidx;		/* temporary column permutation */
 static int *vlp_objidx;		/* object indices */
-static int *vlp_slackobj;	/* slack variables */
 static double *vlp_lambda;	/* lambda column */
 static int lambda_idx;		/* lambda column index */
 
-/* M has size row+objs times cols+objs+1 */
+/* M has size row+objs times cols+1 */
 #define M(r,c)		vlp_M[(r)+((c)-1)*(vrows+vobjs)-1]
 
 #define xalloc(ptr,type,size)	\
@@ -122,22 +120,20 @@ static int allocate_vlp(int rows, int cols, int objs)
        xalloc(vvertex,double,objs+1) ||
        xalloc(vlp_objidx,int,objs+1) ||
        xalloc(vlp_lambda,double,objs+1) ||
-       xalloc(vlp_slackobj,int,objs+1) ||
-       xalloc(vlp_M,double,(rows+objs)*(cols+objs+1)) ||
+       xalloc(vlp_M,double,(rows+objs)*(cols+1)) ||
        xalloc(vlp_rowidx,int,rows+objs+1) ||
-       xalloc(vlp_colidx,int,cols+objs+2))
+       xalloc(vlp_colidx,int,cols+1))
          return -1; // out of memory
     // indirect inidices to rows and columns
     for(i=0;i<=rows+objs;i++) vlp_rowidx[i]=i;
-    for(i=0;i<=cols+objs+1;i++) vlp_colidx[i]=i;
+    for(i=0;i<=cols+1;i++) vlp_colidx[i]=i;
     if(PARAMS(ShuffleMatrix)){ // permute randomly
         perm_array(rows+objs,vlp_rowidx);
-        perm_array(cols+objs+1,vlp_colidx);
+        perm_array(cols+1,vlp_colidx);
     }
     // objective rows and slack columns, and the lambda column
     for(i=1;i<=objs;i++) vlp_objidx[i]=vlp_rowidx[i+rows];
-    for(i=1;i<=objs;i++) vlp_slackobj[i]=vlp_colidx[i+cols];
-    lambda_idx=vlp_colidx[cols+objs+1];
+    lambda_idx=vlp_colidx[cols+1];
     return 0;
 }
 
@@ -257,7 +253,7 @@ int load_vlp(void)
                      report(R_fatal,"read_vlp: out of memory for %s:\n   %s\n",
                                PARAMS(VlpFile),inpline); return 1;
                  }
-		 glp_add_cols(P,cols+objs+1); glp_add_rows(P,rows+objs);
+		 glp_add_cols(P,cols+1); glp_add_rows(P,rows+objs);
                  glp_set_col_bnds(P,lambda_idx,GLP_FR,0.0,0.0); // lambda is free
                  continue;
        case 'j': // j <col> [ f || l <val> | u <val> | d <val1> <val2> | s <val> ]
@@ -318,13 +314,9 @@ int load_vlp(void)
        report(R_fatal,"read_vlp: no 'p' line in %s\n",PARAMS(VlpFile)); return 1; 
     }
     /* the vlp file has been read; set the glpk LP instance */
-    // slack variables; they are fixed to be zero, to be changed later to GLP_LO
-    for(j=1;j<=objs;j++) glp_set_col_bnds(P,vlp_slackobj[j],GLP_FX,0.0,0.0);
-    // diagonal entries of the slack variables are 1.0
-    for(j=1;j<=objs;j++) M(vlp_objidx[j],vlp_slackobj[j])=1.0;
-    // finally upload constraints into P
+    // upload constraints into P
     for(i=0;i<=rows+objs;i++) vlp_rowidx[i]=i; // index file
-    for(j=1;j<=cols+objs+1;j++){
+    for(j=1;j<=cols+1;j++){
         if(j!=lambda_idx) glp_set_mat_col(P,j,rows+objs,vlp_rowidx,&M(1,j)-1);
     }
     free(vlp_colidx); free(vlp_rowidx); free(vlp_M);
@@ -429,11 +421,10 @@ static char *glp_return_msg(int retval)
 
 /**********************************************************************
 * int initialize_oracle(void)
-*  Check if the consistency of the loaded vlp prolem; add the ideal
-*  points if the are missing
+*  Set up glpk simplex parameters.
 *
 * init get_initial_vertex(void)
-*   Create an ouside point to OracleData.overtex for the first approximation.
+*  Create an ouside point to OracleData.overtex for the first approximation.
 *
 * int ask_oracle(void)
 *  The question and the answer is provided in OracleData. Return values:
@@ -467,29 +458,8 @@ static int call_glp(void)
 }
 
 int initialize_oracle(void)
-{int i,j,ret;
+{
     set_oracle_parameters();
-    // compute the maximum along the i-th objective
-    glp_set_obj_dir(P,GLP_MAX);
-    for(i=1;i<=vobjs;i++){
-        // set the objective rows bouunds
-        for(j=1;j<=vobjs;j++)
-            glp_set_row_bnds(P,vlp_objidx[j],i==j ? GLP_FX : GLP_FR,0.0,0.0);
-        ret=call_glp();
-        if(ret){
-            report(R_fatal,"The oracle says: %s (obj %d)\n",glp_return_msg(ret),i);
-            return ORACLE_FAIL;
-        }
-        ret=glp_get_status(P);
-        if(ret==GLP_OPT){ // bounded in this direction
-            glp_set_col_bnds(P,vlp_slackobj[i],GLP_LO,0.0,0.0);
-        } else if(ret!=GLP_UNBND){
-            report(R_fatal,"The oracle says: %s (%d)\n",glp_status_msg(ret),ret);
-            return ret==GLP_NOFEAS ? ORACLE_EMPTY : ORACLE_FAIL;
-        } // otherwise OK
-    }
-    // from now on we compute minimum
-    glp_set_obj_dir(P,GLP_MIN);
     return ORACLE_OK;
 }
 

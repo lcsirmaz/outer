@@ -47,11 +47,8 @@ int load_vlp(void);
 * Oracle manipulation
 *
 * int initialize_oracle()
-*  Check the consistency of the loaded vlp problem; add the ideal points 
-*  if they were missing. Return values:
+*  Set up glpk parameters. Return value:
 *    ORACLE_OK     success
-*    ORACLE_EMPTY  there is no feasible solution
-*    ORACLE_FAIL   other error condition (LP solver failed for some reason)
 *
 * int get initial_vertex()
 *  Create an outside point to OracleData.overtex for the first approximation

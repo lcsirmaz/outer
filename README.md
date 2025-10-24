@@ -59,9 +59,9 @@ maximizing MOLP all objectives must be bounded from above.
 
 #### ALGORITHM
 
-The algorithm is an implementation of Benson's outer approximation mathod,
-see Benson, H.P.: *An Outer Approximation Algorithm for Generating All Efficient Extreme Points in the Outcome Set of a Multiple Objective Linear Programming Problem*. 
-Journal of Global Optimization 13, 1–24 (1998). [https://doi.org/10.1023/A:1008215702611](https://doi.org/10.1023/A:1008215702611).
+The algorithm is an implementation of Benson's outer approximation mathod. The applied algorithm is described in
+Csirmaz, L.: *Inner approximation algorithm for solving linear multiobjective optimization problems*.
+**Optimization**, Volume 70, Issue 7,(2021) [https://doi.org/10.1080/02331934.2020.1737692](https://doi.org/10.1080/02331934.2020.1737692).
 
 #### USAGE
 
@@ -94,7 +94,7 @@ of the problem in vlp format. Accepted options are
 | `--resume=<chk-file>` | resume computation from a checkpoint file |
 | `-m[0..3]`   | set message level: 0: none, 1: errors, 2: all, 3: verbose |
 | `-q`         | quiet, same as `-m0`. Implies `--PrintStatistics=0` |
-| `-p T`       | progress report in every T seconds (default: T=5) |
+| `-p <T>`     | progress report in every T seconds (default: T=5) |
 | `-p 0`       | no progress report |
 | `-y+`        | report extremal solutions (vertices) immediately when generated (default) |
 | `-y-`        | do not report extremal solutions when generated |
@@ -113,7 +113,7 @@ Change tolerances with great care.
 |:--------|:------------|
 |`RandomVertex=1`<br>&nbsp; | 0 = no, 1 = yes <br>  pick the next vertex to be passed to the oracle randomly. |
 |`RandomIdealPoint=1` <br>&nbsp; | 0 = no, 1 = yes <br> choose the ideal direction randomly rather than using (1,1,1,...,1). |
-|`ExactVertexEq=0`<br>&nbsp;<br>&nbsp; | 0 = no, 1 = yes <br>  when a vertex is created, recompute the coordinates immediately from the set of its adjacent facets. |
+|`ExactVertex=0`<br>&nbsp;<br>&nbsp; | 0 = no, 1 = yes <br>  when a vertex is created, recompute the coordinates immediately from the set of its adjacent facets. |
 |`RecalculateVertices=100`<br>&nbsp;<br>&nbsp; | non-negative integer <br> after that many iterations recalculate all vertices from the set of its adjacent facets. The number should be zero (meaning never), or at least 5. |
 |`CheckConsistency=0`<br>&nbsp;<br>&nbsp; | non-negative integer <br> after this many iterations check the consistency of the data structure against numerical errors. The number should be zero (meaning never), or at least 5. |
 |`ExtractAfterBreak=1`<br>&nbsp;<br>&nbsp;<br>&nbsp; | 0 = no, 1 = yes <br> when the program receives a `SIGUSR1` signal or reaches the memory limit, continue extracting new vertices by asking the oracle about every current vertex of the approximating cone. Second signal aborts this post-processing. |
